@@ -4,11 +4,14 @@ from pymodaq.utils.data import DataFromPlugins, DataToExport
 from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
 from pymodaq.utils.parameter import Parameter
 
+from pymodaq_plugins_nkt.hardware.superk_extreme_exb6 import Extreme
+
 # import time
 # import nkt_tools.NKTP_DLL as nkt
-from pylablib.devices import NKT
+# from pylablib.devices import NKT
 #
 # from nkt_tools.extreme import Extreme
+
 
 
 class PythonWrapperOfYourInstrument:
@@ -86,7 +89,7 @@ class DAQ_0DViewer_SuperK_Extreme_EXB6(DAQ_Viewer_base):
             False if initialization failed otherwise True
         """
 
-        self.ini_detector_init(old_controller=controller, new_controller= NKT.GenericInterbusDevice("COM5"))
+        self.ini_detector_init(old_controller=controller, new_controller= Extreme("COM5"))
 
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
         # self.dte_signal_temp.emit(DataToExport(name='myplugin',
@@ -105,7 +108,10 @@ class DAQ_0DViewer_SuperK_Extreme_EXB6(DAQ_Viewer_base):
 
     def close(self):
         """Terminate the communication protocol"""
-        self.controller.close()
+        if not self.controller:
+            pass
+        else:
+            self.controller.close()
 
     def grab_data(self, Naverage=1, **kwargs):
         """Start a grab from the detector
@@ -118,22 +124,8 @@ class DAQ_0DViewer_SuperK_Extreme_EXB6(DAQ_Viewer_base):
         kwargs: dict
             others optionals arguments
         """
-        ## TODO for your custom plugin: you should choose EITHER the synchrone or the asynchrone version following
 
-        # synchrone version (blocking function)
-        # raise NotImplemented  # when writing your own plugin remove this line
-        # data_tot = self.controller.your_method_to_start_a_grab_snap()
-        # self.dte_signal.emit(DataToExport(name='myplugin',
-        #                                   data=[DataFromPlugins(name='Mock1', data=data_tot,
-        #                                                         dim='Data0D', labels=['dat0', 'data1'])]))
-        #########################################################
-
-        # asynchrone version (non-blocking function with callback)
-        # raise NotImplemented  # when writing your own plugin remove this line
-        # self.controller.your_method_to_start_a_grab_snap(self.callback)  # when writing your own plugin replace this line
-        #########################################################
-
-        self.controller.ib_set_reg(15,0x37,542,"u16")
+        self.controller.set_emission(state=3)  # 3 for ON
 
     def callback(self):
         """optional asynchrone method called when the detector has finished its acquisition of data"""
@@ -145,15 +137,8 @@ class DAQ_0DViewer_SuperK_Extreme_EXB6(DAQ_Viewer_base):
 
     def stop(self):
         """Stop the current grab hardware wise if necessary"""
-        ## TODO for your custom plugin
-        # raise NotImplemented  # when writing your own plugin remove this line
-        # self.controller.your_method_to_stop_acquisition()  # when writing your own plugin replace this line
-        # self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-        ##############################
-        # return ''
 
-        self.controller.ib_set_reg(15, 0x37, 170, "u16")
-
+        self.controller.set_emission(state=0)  # 0 for OFF
 
 if __name__ == '__main__':
     main(__file__)
