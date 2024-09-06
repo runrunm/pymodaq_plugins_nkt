@@ -1,0 +1,23 @@
+## To modify by developer(s) of the plugin
+
+[plugin-info]
+SHORT_PLUGIN_NAME = 'nkt'
+
+package-url = 'https://github.com/PyMoDAQ/pymodaq_plugins_nkt'
+description = 'PyMoDAQ plugin using nkt-tools python library for NKT Photonics instruments'
+
+author = 'Bastien Bégon'
+author-email = 'bastien.begon@crpp.cnrs.fr'
+license = 'MIT'
+
+[plugin-install]
+#packages required for your plugin:
+packages-required = ['pymodaq>=4.3.0']
+
+[features]  # defines the plugin features contained into this plugin
+instruments = true  # true if plugin contains instrument classes (else false, notice the lowercase for toml files)
+extensions = false  # true if plugins contains dashboard extensions
+models = false  # true if plugins contains pid models or other models (optimisation...)
+h5exporters = false  # true if plugin contains custom h5 file exporters
+scanners = false  # true if plugin contains custom scan layout (daq_scan extensions)
+
