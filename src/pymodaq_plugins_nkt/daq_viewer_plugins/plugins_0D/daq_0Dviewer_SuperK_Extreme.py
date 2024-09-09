@@ -30,9 +30,14 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
     # TODO add your particular attributes here if any
 
     """
+    _laser_port = None
+
+    ports = pll.list_backend_resources("serial")
+
     params = comon_parameters+[
-        ## TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
-        ]
+        {'title': 'COM Port:', 'name': 'com_port', 'type': 'list', 'limits': ports},
+        {'title': 'Power:', 'name': 'power', 'type': 'float', 'value': 17.0},
+    ]
 
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
@@ -51,11 +56,12 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
             A given parameter (within detector_settings) whose value has been changed by the user
         """
         ## TODO for your custom plugin
-        # if param.name() == "a_parameter_you've_added_in_self.params":
-        #    self.controller.your_method_to_apply_this_param_change()  # when writing your own plugin replace this line
-#        elif ...
-        ##
-        pass
+        if param.name() == "com_port":
+            self.controller.close_connection()  # when writing your own plugin replace this line
+            self.controller.open_connection(port=self.settings['com_port'])
+
+        elif param.name() == "power":
+            self.controller.set_power(value=int(10 * self.settings['power']))
 
     def ini_detector(self, controller=None):
         """Detector communication initialization
@@ -73,7 +79,7 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
             False if initialization failed otherwise True
         """
 
-        self.ini_detector_init(old_controller=controller, new_controller= Extreme())
+        self.ini_detector_init(old_controller=controller, new_controller= Extreme(port=self.settings['com_port']))
 
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
         # self.dte_signal_temp.emit(DataToExport(name='myplugin',
@@ -83,6 +89,8 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
         #                                                             labels=['Mock1', 'label2'])]))
 
         # print(self.controller.scan_devices(port))
+
+        # print(self.controller.system_type())
 
         info = "Whatever info you want to log"
         initialized = True
@@ -124,3 +132,4 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
 
 if __name__ == '__main__':
     main(__file__)
+
