@@ -72,9 +72,8 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
         initialized: bool
             False if initialization failed otherwise True
         """
-        port = "COM5"
 
-        self.ini_detector_init(old_controller=controller, new_controller= Extreme(port))
+        self.ini_detector_init(old_controller=controller, new_controller= Extreme())
 
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
         # self.dte_signal_temp.emit(DataToExport(name='myplugin',
@@ -86,7 +85,6 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
         # print(self.controller.scan_devices(port))
 
         info = "Whatever info you want to log"
-        # initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # TODO
         initialized = True
         return info, initialized
 
@@ -109,10 +107,7 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
             others optionals arguments
         """
 
-        # self.controller.set_emission(state=3)  # 3 for ON
-        print(pll.list_backend_resources("serial"))
-
-        print(self.controller.scan_devices(port="COM5"))
+        self.controller.set_emission(state=3)  # 3 for ON
 
     def callback(self):
         """optional asynchrone method called when the detector has finished its acquisition of data"""
