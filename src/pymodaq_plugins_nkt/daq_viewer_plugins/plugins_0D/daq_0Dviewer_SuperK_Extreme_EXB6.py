@@ -6,17 +6,6 @@ from pymodaq.utils.parameter import Parameter
 
 from pymodaq_plugins_nkt.hardware.superk_extreme_exb6 import Extreme
 
-# import time
-# import nkt_tools.NKTP_DLL as nkt
-# from pylablib.devices import NKT
-#
-# from nkt_tools.extreme import Extreme
-
-
-
-class PythonWrapperOfYourInstrument:
-    #  TODO Replace this fake class with the import of the real python wrapper of your instrument
-    pass
 
 # TODO:
 # (1) change the name of the following class to DAQ_0DViewer_TheNameOfYourChoice
@@ -24,7 +13,7 @@ class PythonWrapperOfYourInstrument:
 #     for the class name and the file name.)
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
 #     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_0D
-class DAQ_0DViewer_SuperK_Extreme_EXB6(DAQ_Viewer_base):
+class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
     """ Instrument plugin class for a OD viewer.
     
     This object inherits all functionalities to communicate with PyMoDAQ’s DAQ_Viewer module through inheritance via
