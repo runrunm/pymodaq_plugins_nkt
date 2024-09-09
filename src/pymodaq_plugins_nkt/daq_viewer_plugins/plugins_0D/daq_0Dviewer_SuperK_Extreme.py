@@ -4,15 +4,10 @@ from pymodaq.utils.data import DataFromPlugins, DataToExport
 from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
 from pymodaq.utils.parameter import Parameter
 
-from pymodaq_plugins_nkt.hardware.superk_extreme_exb6 import Extreme
+import pylablib as pll
+from pymodaq_plugins_nkt.hardware.nkt_wrapper import Extreme
 
 
-# TODO:
-# (1) change the name of the following class to DAQ_0DViewer_TheNameOfYourChoice
-# (2) change the name of this file to daq_0Dviewer_TheNameOfYourChoice ("TheNameOfYourChoice" should be the SAME
-#     for the class name and the file name.)
-# (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
-#     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_0D
 class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
     """ Instrument plugin class for a OD viewer.
     
@@ -77,8 +72,9 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
         initialized: bool
             False if initialization failed otherwise True
         """
+        port = "COM5"
 
-        self.ini_detector_init(old_controller=controller, new_controller= Extreme("COM5"))
+        self.ini_detector_init(old_controller=controller, new_controller= Extreme(port))
 
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
         # self.dte_signal_temp.emit(DataToExport(name='myplugin',
@@ -87,9 +83,8 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
         #                                                             dim='Data0D',
         #                                                             labels=['Mock1', 'label2'])]))
 
-        # time.sleep(5)
-        # self.controller.module_address = None
-        # print(self.controller.module_address)
+        # print(self.controller.scan_devices(port))
+
         info = "Whatever info you want to log"
         # initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # TODO
         initialized = True
@@ -114,7 +109,10 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
             others optionals arguments
         """
 
-        self.controller.set_emission(state=3)  # 3 for ON
+        # self.controller.set_emission(state=3)  # 3 for ON
+        print(pll.list_backend_resources("serial"))
+
+        print(self.controller.scan_devices(port="COM5"))
 
     def callback(self):
         """optional asynchrone method called when the detector has finished its acquisition of data"""
