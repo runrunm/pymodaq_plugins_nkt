@@ -57,7 +57,7 @@ class DAQ_0DViewer_SuperK_Extreme(DAQ_Viewer_base):
         """
         ## TODO for your custom plugin
         if param.name() == "com_port":
-            self.controller.close_connection()  # when writing your own plugin replace this line
+            self.controller.close_connection()
             self.controller.open_connection(port=self.settings['com_port'])
 
         elif param.name() == "power":
