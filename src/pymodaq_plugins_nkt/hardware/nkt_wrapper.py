@@ -13,7 +13,7 @@ class Extreme:
 
 
     def system_type(self):
-        register_address = 0x61
+        register_address = 0x60
         return self.laser.ib_get_reg(self.laser_addr, register_address, "u8")
 
     def open_connection(self, port):
